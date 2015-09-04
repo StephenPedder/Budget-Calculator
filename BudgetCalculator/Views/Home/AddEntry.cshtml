@@ -1,0 +1,39 @@
+﻿@model BudgetCalculator.Data.Entry
+
+@{
+    ViewBag.Title = "AddEntry";
+}
+
+<div class="col-md-2">
+    @using (Html.BeginForm()) {
+            <fieldset>
+                <legend>Add New Entry</legend>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Description)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Description)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.BudgetCategory)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.BudgetCategory)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Amount)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Amount)
+                </div>
+
+                <p>
+                    <input type="submit" value="create" />
+                </p>
+
+            </fieldset>
+    }
+</div>

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<BudgetCalculator.Data.Saving>
+
+@{
+    ViewBag.Title = "Savings";
+}
+
+<h3>@ViewBag.Title</h3>
+
+<div class="col-md-12">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <th>Name</th>
+            <th>Amount</th>
+            <th></th>
+        </thead>
+
+        @foreach (var saving in Model)
+        { 
+            <tbody>
+                <td>@saving.Name</td>
+                <td>@saving.Amount</td>
+                <td>edit | delete</td>
+            </tbody>
+        }
+
+    </table>
+</div>
