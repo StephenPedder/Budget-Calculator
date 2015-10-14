@@ -16,6 +16,10 @@ namespace BudgetCalculator.Data
         bool AddSaving(Saving newSaving);
         bool AddBudget(Budget newBudget);
 
+        bool RemoveEntry(Entry entry);
+        bool RemoveSaving(Saving saving);
+        bool RemoveBudget(Budget budget);
+
         bool Save();
     }
 }

@@ -7,24 +7,27 @@
 <h3>@ViewBag.Title</h3>
 
 <div class="col-md-1">
-    @Html.ActionLink("Add Budget", "Add", "Budget")
+    @Html.ActionLink("Create New", "Create")
 </div>
 
 <div class="col-md-12">
     <table class="table table-striped table-bordered">
         <thead>
-            <th>Name</th>
-            <th>Amount</th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Amount)</th>
         </thead>
 
-        @foreach (var entry in Model)
-        { 
+        @foreach (var item in Model)
+        {
             <tbody>
-                <td>@entry.Name</td>
-                <td>@entry.Amount</td>
-                <td>edit | delete</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                </td>
             </tbody>
         }
+
     </table>
 </div>

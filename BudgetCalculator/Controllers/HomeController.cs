@@ -27,8 +27,70 @@ namespace BudgetCalculator.Controllers
             var savings = _repo.GetSavings()
                 .ToList();
 
+            @ViewBag.CurrentBalance = GetCurrentBalance();
+
             return View();
         }
-        
+
+
+        public ActionResult BudgetProgress()
+        {
+            var budgetProgress = GetBudgetProgress();
+            return PartialView("_BudgetProgress", budgetProgress);
+        }
+
+
+        public decimal GetCurrentBalance()
+        {
+            var entries = _repo.GetEntries();
+
+            var incomingData = from e in entries
+                           where e.BudgetCategory == "Starting"
+                           select new { Name = e.BudgetCategory, Amount = e.Amount };
+
+            var outgoingData = from e in entries
+                           where e.BudgetCategory != "Starting"
+                           select new { Name = e.BudgetCategory, Amount = e.Amount };
+
+            var incoming = incomingData.Sum(i => i.Amount);
+            var outgoing = outgoingData.Sum(i => i.Amount);
+
+            return incoming - outgoing;
+        }
+
+
+        public List<BudgetCalculator.Data.BudgetProgess> GetBudgetProgress()
+        {
+            var entries = _repo.GetEntries()
+                .ToList();
+
+            var budgets = _repo.GetBudgets()
+                .ToList();
+
+            var filtered2 = from e in entries
+                            join b in budgets
+                            on e.BudgetCategory equals b.Name
+                            group e by new { b.Name, e.BudgetCategory, b.Amount } into g
+                            orderby g.Key.Name
+                            select new { Budget = g.Key.BudgetCategory, Target = g.Key.Amount, Amount = g.Sum(e => e.Amount),  Actual = g.Key.Amount - g.Sum(e => e.Amount) };
+
+            var data = filtered2.ToList();
+
+            List<BudgetProgess> budgetProgress = new List<BudgetProgess>();
+
+            foreach (var item in data)
+            {
+                BudgetProgess bp = new BudgetProgess();
+                bp.Name = item.Budget;
+                bp.Target = item.Target;
+                bp.Spent = item.Amount;
+                bp.Left = item.Actual;
+                budgetProgress.Add(bp);
+            }
+            
+            return budgetProgress;
+        }
+
+
     }
 }

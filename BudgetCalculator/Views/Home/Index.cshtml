@@ -4,5 +4,19 @@
 
 <h3>@ViewBag.Title</h3>
 
+<br />
 
+<div class="col-md-12">
+    <h2>Current Balance: £@ViewBag.CurrentBalance</h2>
+</div>
 
+<br />
+<br />
+
+<div class="col-md-12">
+    <div><h3>Budget Progress</h3></div>
+
+    <div>
+        @Html.Action("BudgetProgress", "Home")
+    </div>
+</div>

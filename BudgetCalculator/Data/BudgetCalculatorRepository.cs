@@ -78,6 +78,26 @@ namespace BudgetCalculator.Data
         }
 
 
+        public bool RemoveEntry(Entry entry)
+        {
+            _ctx.Entries.Remove(entry);
+            return true;
+        }
+
+        public bool RemoveSaving(Saving saving)
+        {
+            _ctx.Savings.Remove(saving);
+            return true;
+        }
+
+        public bool RemoveBudget(Budget budget)
+        {
+            _ctx.Budgets.Remove(budget);
+            return true;
+        }
+
+
+
         public bool Save()
         {
             try
@@ -90,6 +110,5 @@ namespace BudgetCalculator.Data
                 return false;
             }
         }
-
     }
 }

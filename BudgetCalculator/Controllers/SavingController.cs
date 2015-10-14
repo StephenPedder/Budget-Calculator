@@ -1,56 +1,111 @@
-﻿using BudgetCalculator.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BudgetCalculator.Data;
+
 namespace BudgetCalculator.Controllers
 {
     public class SavingController : Controller
     {
-        private IBudgetCalculatorRepository _repo;
-        public SavingController(IBudgetCalculatorRepository repo)
-        {
-            _repo = repo;
-        }
+        private BudgetCalculatorContext db = new BudgetCalculatorContext();
+
+        //
+        // GET: /Saving/
 
         public ActionResult Index()
         {
-            var savings = _repo.GetSavings()
-                .OrderBy(entry => entry.Name)
-                .ToList();
-
-            return View(savings);
+            return View(db.Savings.ToList());
         }
 
-        [HttpGet]
-        public ActionResult Add()
+
+        //
+        // GET: /Saving/Create
+
+        public ActionResult Create()
         {
             return View();
         }
 
+        //
+        // POST: /Saving/Create
+
         [HttpPost]
-        public ActionResult Add(Saving newSaving)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Saving saving)
         {
-            if (_repo.AddSaving(newSaving) && _repo.Save())
+            if (ModelState.IsValid)
             {
+                db.Savings.Add(saving);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            else
-            {
-                throw new NotImplementedException();
-            }
+
+            return View(saving);
         }
 
-        //public HttpResponseMessage Post(int savingId, [FromBody]Saving newSaving)
-        //{
-        //    if (_repo.AddSaving(newSaving) && _repo.Save())
-        //    {
-        //        return Request.CreateResponse(HttpStatusCode.Created, newSaving);
-        //    }
+        //
+        // GET: /Saving/Edit/5
 
-        //    return Request.CreateResponse(HttpStatusCode.BadRequest);
-        //}
+        public ActionResult Edit(int id = 0)
+        {
+            Saving saving = db.Savings.Find(id);
+            if (saving == null)
+            {
+                return HttpNotFound();
+            }
+            return View(saving);
+        }
 
+        //
+        // POST: /Saving/Edit/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Saving saving)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(saving).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(saving);
+        }
+
+        //
+        // GET: /Saving/Delete/5
+
+        public ActionResult Delete(int id = 0)
+        {
+            Saving saving = db.Savings.Find(id);
+            if (saving == null)
+            {
+                return HttpNotFound();
+            }
+            return View(saving);
+        }
+
+        //
+        // POST: /Saving/Delete/5
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Saving saving = db.Savings.Find(id);
+            db.Savings.Remove(saving);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            db.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

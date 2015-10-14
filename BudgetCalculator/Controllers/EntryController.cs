@@ -1,79 +1,114 @@
-﻿using BudgetCalculator.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BudgetCalculator.Data;
 
 namespace BudgetCalculator.Controllers
 {
     public class EntryController : Controller
     {
-        private IBudgetCalculatorRepository _repo;
-        public EntryController(IBudgetCalculatorRepository repo)
-        {
-            _repo = repo;
-        }
+        private BudgetCalculatorContext db = new BudgetCalculatorContext();
+
+        //
+        // GET: /Entry/
 
         public ActionResult Index()
         {
-            var entries = _repo.GetEntries()
-                .OrderByDescending(entry => entry.Date)
-                .ToList();
-
-            return View(entries);
+            return View(db.Entries.ToList().OrderByDescending(e => e.Date));
         }
 
-        [HttpGet]
-        public ActionResult Add()
+ 
+
+        //
+        // GET: /Entry/Create
+
+        public ActionResult Create()
         {
-            return View();
+            Entry entry = new Entry();
+            entry.Date = DateTime.Now;
+            return View(entry);
         }
+
+        //
+        // POST: /Entry/Create
 
         [HttpPost]
-        public ActionResult Add(Entry newEntry)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Entry entry)
         {
-            if (_repo.AddEntry(newEntry) && _repo.Save())
+            if (ModelState.IsValid)
             {
+                db.Entries.Add(entry);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            else
-            {
-                throw new NotImplementedException();
-            }
+
+            return View(entry);
         }
 
+        //
+        // GET: /Entry/Edit/5
 
+        public ActionResult Edit(int id = 0)
+        {
+            Entry entry = db.Entries.Find(id);
+            if (entry == null)
+            {
+                return HttpNotFound();
+            }
+            return View(entry);
+        }
 
-        //public bool Insert(Entry newEntry)
-        //{
-        //    try
-        //    {
-        //        if (_repo.AddEntry(newEntry) && _repo.Save())
-        //        { 
-        //            return true; 
-        //        }
-        //        else 
-        //        { 
-        //            return false; 
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        //TODO log error
-        //        return false;  
-        //    }
-        //}
+        //
+        // POST: /Entry/Edit/5
 
-        //public HttpResponseMessage Post(int entryId, [FromBody]Entry newEntry)
-        //{
-        //    if (_repo.AddEntry(newEntry) && _repo.Save())
-        //    {
-        //        return Request.CreateResponse(HttpStatusCode.Created, newEntry);
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Entry entry)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(entry).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(entry);
+        }
 
-        //    return Request.CreateResponse(HttpStatusCode.BadRequest);
-        //}
+        //
+        // GET: /Entry/Delete/5
 
+        public ActionResult Delete(int id = 0)
+        {
+            Entry entry = db.Entries.Find(id);
+            if (entry == null)
+            {
+                return HttpNotFound();
+            }
+            return View(entry);
+        }
+
+        //
+        // POST: /Entry/Delete/5
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Entry entry = db.Entries.Find(id);
+            db.Entries.Remove(entry);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            db.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

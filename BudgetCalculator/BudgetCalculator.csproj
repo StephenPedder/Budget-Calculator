@@ -208,6 +208,7 @@
     <Compile Include="Data\BudgetCalculatorContext.cs" />
     <Compile Include="Data\BudgetCalculatorMigrationsConfiguration.cs" />
     <Compile Include="Data\BudgetCalculatorRepository.cs" />
+    <Compile Include="Data\BudgetProgess.cs" />
     <Compile Include="Data\Entry.cs" />
     <Compile Include="Data\IBudgetCalculatorRepository.cs" />
     <Compile Include="Data\Saving.cs" />
@@ -1257,11 +1258,18 @@
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Home\AddEntry.cshtml" />
     <Content Include="Views\Entry\Index.cshtml" />
-    <Content Include="Views\Entry\Add.cshtml" />
-    <Content Include="Views\Saving\Index.cshtml" />
+    <Content Include="Views\Entry\Create.cshtml" />
+    <Content Include="Views\Entry\Edit.cshtml" />
+    <Content Include="Views\Entry\Delete.cshtml" />
     <Content Include="Views\Budget\Index.cshtml" />
-    <Content Include="Views\Budget\Add.cshtml" />
-    <Content Include="Views\Saving\Add.cshtml" />
+    <Content Include="Views\Budget\Create.cshtml" />
+    <Content Include="Views\Budget\Edit.cshtml" />
+    <Content Include="Views\Budget\Delete.cshtml" />
+    <Content Include="Views\Saving\Index.cshtml" />
+    <Content Include="Views\Saving\Create.cshtml" />
+    <Content Include="Views\Saving\Edit.cshtml" />
+    <Content Include="Views\Saving\Delete.cshtml" />
+    <Content Include="Views\Home\_BudgetProgress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
