@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BudgetCalculator.Data.BudgetProgess>
+﻿@model IEnumerable<BudgetCalculator.Data.SavingProgress>
 
 <div class="col-md-12">
     <table class="table table-striped table-bordered">
@@ -6,16 +6,16 @@
             
             <th>@Html.DisplayNameFor(model => model.Name)</th>
             <th>@Html.DisplayNameFor(model => model.Target)</th>
-            <th>@Html.DisplayNameFor(model => model.Spent)</th>
+            <th>@Html.DisplayNameFor(model => model.Saved)</th>
             <th>@Html.DisplayNameFor(model => model.Left)</th>
         </thead>
 
-        @foreach (BudgetCalculator.Data.BudgetProgess item in Model)
+        @foreach (BudgetCalculator.Data.SavingProgress item in Model)
         {
             <tbody>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Target)</td>
-                <td>@Html.DisplayFor(modelItem => item.Spent)</td>
+                <td>@Html.DisplayFor(modelItem => item.Saved)</td>
                 <td>@Html.DisplayFor(modelItem => item.Left)</td>
             </tbody>
         }

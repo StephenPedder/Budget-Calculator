@@ -40,6 +40,12 @@ namespace BudgetCalculator.Controllers
         }
 
 
+        public ActionResult SavingProgress()
+        {
+            var savingProgress = GetSavingProgress();
+            return PartialView("_SavingProgress", savingProgress);
+        }
+
         public decimal GetCurrentBalance()
         {
             var entries = _repo.GetEntries();
@@ -67,14 +73,14 @@ namespace BudgetCalculator.Controllers
             var budgets = _repo.GetBudgets()
                 .ToList();
 
-            var filtered2 = from e in entries
+            var filtered = from e in entries
                             join b in budgets
                             on e.BudgetCategory equals b.Name
                             group e by new { b.Name, e.BudgetCategory, b.Amount } into g
                             orderby g.Key.Name
                             select new { Budget = g.Key.BudgetCategory, Target = g.Key.Amount, Amount = g.Sum(e => e.Amount),  Actual = g.Key.Amount - g.Sum(e => e.Amount) };
 
-            var data = filtered2.ToList();
+            var data = filtered.ToList();
 
             List<BudgetProgess> budgetProgress = new List<BudgetProgess>();
 
@@ -89,6 +95,39 @@ namespace BudgetCalculator.Controllers
             }
             
             return budgetProgress;
+        }
+
+
+        public List<BudgetCalculator.Data.SavingProgress> GetSavingProgress()
+        {
+            var entries = _repo.GetEntries()
+                .ToList();
+
+            var savings = _repo.GetSavings()
+                .ToList();
+
+
+            var filtered = from s in savings
+                           join e in entries
+                           on s.Name equals e.BudgetCategory into g
+                           orderby s.Name
+                           select new { Saving = s.Name, Target = s.Amount, Amount = g.Sum(e => e.Amount), Actual = s.Amount - g.Sum(e => e.Amount) };
+
+            var data = filtered.ToList();
+
+            List<SavingProgress> savingProgress = new List<SavingProgress>();
+
+            foreach (var item in data)
+            {
+                SavingProgress sp = new SavingProgress();
+                sp.Name = item.Saving;
+                sp.Target = item.Target;
+                sp.Saved = item.Amount;
+                sp.Left = item.Actual;
+                savingProgress.Add(sp);
+            }
+
+            return savingProgress;
         }
 
 

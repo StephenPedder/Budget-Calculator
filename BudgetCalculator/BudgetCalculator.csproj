@@ -212,6 +212,7 @@
     <Compile Include="Data\Entry.cs" />
     <Compile Include="Data\IBudgetCalculatorRepository.cs" />
     <Compile Include="Data\Saving.cs" />
+    <Compile Include="Data\SavingProgress.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1270,6 +1271,7 @@
     <Content Include="Views\Saving\Edit.cshtml" />
     <Content Include="Views\Saving\Delete.cshtml" />
     <Content Include="Views\Home\_BudgetProgress.cshtml" />
+    <Content Include="Views\Home\_SavingProgress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
